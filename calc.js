@@ -42,8 +42,11 @@ function displayMath() {
 
 function isValidOperation() {
   if (firstNumber !== "") {
-    if (operator !== "" && secondNumber !== "");
-    return true;
+    if (operator !== "" && secondNumber !== "") {
+      return true;
+    }
+  } else {
+    return false;
   }
 }
 
@@ -59,6 +62,7 @@ function buttonInput(e) {
         : (secondNumber += e.srcElement.innerText);
     }
   }
+
   if (e.srcElement.className === "calcButtons") {
     if (operator === "") {
       operator = e.srcElement.innerText;
@@ -75,11 +79,15 @@ function buttonInput(e) {
   }
 
   if (e.srcElement.id === "equalsButton") {
-    result = runMath(+firstNumber, +secondNumber, operator);
-    outputDisplay = result;
-  } else {
-    displayMath();
+    if (isValidOperation()) {
+      result = runMath(+firstNumber, +secondNumber, operator);
+      firstNumber = result;
+      operator = "";
+      secondNumber = "";
+    }
   }
+
+  displayMath();
   resultScreen.textContent = outputDisplay;
 }
 
@@ -102,6 +110,7 @@ function runMath(num1, num2, op) {
       return multiply(num1, num2);
 
     case "/":
+      //Math.round(divide(num1, num2) * 1000000) / 1000000;
       return divide(num1, num2);
   }
 }
