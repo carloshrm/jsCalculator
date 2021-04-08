@@ -9,10 +9,11 @@ const equalsButton = document
   .addEventListener("click", buttonInput);
 const numberContainer = document.querySelector("#numberButtons");
 const resultScreen = document.querySelector("#resultScreen");
+const keyCapture = document.addEventListener("keydown", keyboardShortcuts);
 
 let firstNumber = "";
 let secondNumber = "";
-let operator = "";
+let operator = null;
 let result = "";
 let outputDisplay = firstNumber;
 resultScreen.textContent = 0;
@@ -26,49 +27,36 @@ for (let i = 9; i >= 0; i--) {
   if (i === 0) {
     const numberButton = document.createElement("div");
     numberButton.classList.add("numberIn");
-    numberButton.textContent = ",";
+    numberButton.textContent = ".";
     numberButton.addEventListener("click", buttonInput);
     numberContainer.appendChild(numberButton);
   }
 }
 
-function displayMath() {
-  if (operator !== "") {
-    outputDisplay = `${firstNumber} ${operator} ${secondNumber}`;
-  } else {
-    outputDisplay = firstNumber;
-  }
-}
-
-function isValidOperation() {
-  if (firstNumber !== "") {
-    if (operator !== "" && secondNumber !== "") {
-      return true;
-    }
-  } else {
-    return false;
-  }
-}
+function keyboardShortcuts(e) {}
 
 function buttonInput(e) {
+  let inputKey = e.srcElement.innerText;
+
   if (e.srcElement.className === "numberIn") {
-    if (operator === "") {
-      firstNumber === ""
-        ? (firstNumber = e.srcElement.innerText)
-        : (firstNumber += e.srcElement.innerText);
+    if (operator === null) {
+      firstNumber === "" ? (firstNumber = inputKey) : (firstNumber += inputKey);
     } else {
       secondNumber === ""
-        ? (secondNumber = e.srcElement.innerText)
-        : (secondNumber += e.srcElement.innerText);
+        ? (secondNumber = inputKey)
+        : (secondNumber += inputKey);
     }
   }
 
   if (e.srcElement.className === "calcButtons") {
-    if (operator === "") {
+    if (operator === null) {
       operator = e.srcElement.innerText;
-      if (firstNumber === "") firstNumber = 0;
+      if (firstNumber === "") {
+        firstNumber = 0;
+      }
     }
-    if (isValidOperation()) {
+
+    if (isValidOperation(firstNumber, secondNumber, operator)) {
       result = runMath(+firstNumber, +secondNumber, operator);
       operator = e.srcElement.innerText;
       firstNumber = result;
@@ -79,7 +67,7 @@ function buttonInput(e) {
   }
 
   if (e.srcElement.id === "equalsButton") {
-    if (isValidOperation()) {
+    if (isValidOperation(firstNumber, secondNumber, operator)) {
       result = runMath(+firstNumber, +secondNumber, operator);
       firstNumber = result;
       operator = "";
@@ -91,27 +79,47 @@ function buttonInput(e) {
   resultScreen.textContent = outputDisplay;
 }
 
+function isValidOperation(a, b, o) {
+  if (a === 0 && o === null) return false;
+
+  if (a !== "") {
+    if (o !== null && b !== "") {
+      return true;
+    }
+  } else {
+    return false;
+  }
+}
+
+function displayMath() {
+  if (operator !== null) {
+    outputDisplay = `${firstNumber} ${operator} ${secondNumber}`;
+  } else {
+    outputDisplay = firstNumber;
+  }
+}
+
 function clear() {
   firstNumber = "";
   secondNumber = "";
-  operator = "";
+  operator = null;
   resultScreen.textContent = 0;
 }
 
 function runMath(num1, num2, op) {
   switch (op) {
     case "+":
-      return add(num1, num2);
+      return num1 + num2;
 
     case "-":
-      return subtract(num1, num2);
+      return num1 - num2;
 
     case "x":
-      return multiply(num1, num2);
+      return num1 * num2;
 
     case "/":
       //Math.round(divide(num1, num2) * 1000000) / 1000000;
-      return divide(num1, num2);
+      return num1 / num2;
   }
 }
 
