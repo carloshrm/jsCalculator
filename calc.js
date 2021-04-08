@@ -6,7 +6,10 @@ const clearButton = document
   .addEventListener("click", clear);
 const equalsButton = document
   .querySelector("#equalsButton")
-  .addEventListener("click", buttonInput);
+  .addEventListener("click", runEquals);
+const backButton = document
+  .querySelector("#backButton")
+  .addEventListener("click", backspace);
 const numberContainer = document.querySelector("#numberButtons");
 const resultScreen = document.querySelector("#resultScreen");
 const keyCapture = document.addEventListener("keydown", keyboardShortcuts);
@@ -35,27 +38,52 @@ for (let i = 9; i >= 0; i--) {
 
 function keyboardShortcuts(e) {}
 
+function backspace() {
+  if (operator === null) {
+    if (firstNumber.length <= 1) return;
+    firstNumber = firstNumber.substr(0, firstNumber.length - 1);
+  } else {
+    if (secondNumber.length <= 1) return;
+    secondNumber = secondNumber.substr(0, secondNumber.length - 1);
+  }
+  displayMath();
+}
+
 function buttonInput(e) {
   let inputKey = e.srcElement.innerText;
+  let inputType = e.srcElement.className;
+  //    Check what kind of button was pressed
+  //if it's a number, check if the operator was set. if yes, then the number comes after
+  //if an operator was pressed, set or overwrite the operator. check for a first number, if none, then assume it as zero
+  //    in case an operator is pressed repeatedly, check if two values are set, and run the math operation
+  //    the result is then set as first number, the new operator is set, and the calculator waits for a second number again.
+  // numbers are "added together" as string, only get parsed with a + when the math runs
 
-  if (e.srcElement.className === "numberIn") {
+  if (inputType === "numberIn") {
     if (operator === null) {
-      firstNumber === "" ? (firstNumber = inputKey) : (firstNumber += inputKey);
+      if (firstNumber === "") {
+        firstNumber = inputKey;
+      } else {
+        if (firstNumber.indexOf(".") !== -1 && inputKey === ".") return;
+        firstNumber += inputKey;
+      }
     } else {
-      secondNumber === ""
-        ? (secondNumber = inputKey)
-        : (secondNumber += inputKey);
+      if (secondNumber === "") {
+        secondNumber = inputKey;
+      } else {
+        if (secondNumber.indexOf(".") !== -1 && inputKey === ".") return;
+        secondNumber += inputKey;
+      }
     }
   }
 
-  if (e.srcElement.className === "calcButtons") {
+  if (inputType === "calcButtons") {
     if (operator === null) {
       operator = e.srcElement.innerText;
       if (firstNumber === "") {
         firstNumber = 0;
       }
     }
-
     if (isValidOperation(firstNumber, secondNumber, operator)) {
       result = runMath(+firstNumber, +secondNumber, operator);
       operator = e.srcElement.innerText;
@@ -65,18 +93,7 @@ function buttonInput(e) {
       operator = e.srcElement.innerText;
     }
   }
-
-  if (e.srcElement.id === "equalsButton") {
-    if (isValidOperation(firstNumber, secondNumber, operator)) {
-      result = runMath(+firstNumber, +secondNumber, operator);
-      firstNumber = result;
-      operator = "";
-      secondNumber = "";
-    }
-  }
-
   displayMath();
-  resultScreen.textContent = outputDisplay;
 }
 
 function isValidOperation(a, b, o) {
@@ -97,6 +114,7 @@ function displayMath() {
   } else {
     outputDisplay = firstNumber;
   }
+  resultScreen.textContent = outputDisplay;
 }
 
 function clear() {
@@ -106,32 +124,38 @@ function clear() {
   resultScreen.textContent = 0;
 }
 
+function runEquals() {
+  if (isValidOperation(firstNumber, secondNumber, operator)) {
+    result = runMath(+firstNumber, +secondNumber, operator);
+    firstNumber = result;
+    operator = null;
+    secondNumber = "";
+  }
+  displayMath();
+}
+
 function runMath(num1, num2, op) {
   switch (op) {
     case "+":
       return num1 + num2;
-
     case "-":
       return num1 - num2;
-
     case "x":
       return num1 * num2;
-
     case "/":
       //Math.round(divide(num1, num2) * 1000000) / 1000000;
       return num1 / num2;
   }
 }
-
-function add(x, y) {
-  return x + y;
-}
-function subtract(x, y) {
-  return x - y;
-}
-function multiply(x, y) {
-  return x * y;
-}
-function divide(x, y) {
-  return x / y;
-}
+// function add(x, y) {
+//   return x + y;
+// }
+// function subtract(x, y) {
+//   return x - y;
+// }
+// function multiply(x, y) {
+//   return x * y;
+// }
+// function divide(x, y) {
+//   return x / y;
+// }

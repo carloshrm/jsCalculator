@@ -36,6 +36,7 @@ html {
   grid-row: 2;
   display: flex;
   flex-flow: row wrap;
+  align-content: center;
 }
 
 #resultButtons {
@@ -48,23 +49,31 @@ html {
 .numberIn,
 #clearButton,
 #equalsButton,
-#dotButton {
-  flex: 1 1 20%;
-  display: flex;
+#dotButton,
+#backButton {
+  flex: 1 1 24%;
+  text-align: center;
   justify-content: center;
   font-size: 1.5em;
+  font-weight: bold;
   margin: 2px;
   padding: 0.5em;
   background-color: #e9e6ff;
   color: #595959;
   border: 0px solid transparent;
 }
+.numberIn {
+  padding: 0.8em 0.5em 0.8em 0.5em;
+}
 
 .calcButtons,
 #clearButton,
 #equalsButton {
   background-color: #d4d1eb;
-  color: #595959;
+}
+
+#backButton {
+  font-size: 1em;
 }
 
 #resultScreen {
