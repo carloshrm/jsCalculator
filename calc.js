@@ -2,13 +2,13 @@ const operatorButtons = document
   .querySelectorAll(".calcButtons")
   .forEach((x) => x.addEventListener("click", buttonInput));
 const clearButton = document
-  .querySelector("#clearButton")
+  .querySelector("#Escape")
   .addEventListener("click", clear);
 const equalsButton = document
-  .querySelector("#equalsButton")
+  .querySelector("#Enter")
   .addEventListener("click", runEquals);
 const backButton = document
-  .querySelector("#backButton")
+  .querySelector("#Backspace")
   .addEventListener("click", backspace);
 const numberContainer = document.querySelector("#numberButtons");
 const resultScreen = document.querySelector("#resultScreen");
@@ -25,18 +25,25 @@ for (let i = 9; i >= 0; i--) {
   const numberButton = document.createElement("div");
   numberButton.classList.add("numberIn");
   numberButton.textContent = `${i}`;
+  numberButton.setAttribute("id", i);
   numberButton.addEventListener("click", buttonInput);
   numberContainer.appendChild(numberButton);
   if (i === 0) {
     const numberButton = document.createElement("div");
     numberButton.classList.add("numberIn");
     numberButton.textContent = ".";
+    numberButton.setAttribute("id", ",");
     numberButton.addEventListener("click", buttonInput);
     numberContainer.appendChild(numberButton);
   }
 }
 
-function keyboardShortcuts(e) {}
+function keyboardShortcuts(e) {
+  let targetButton = document.getElementById(e.key);
+  if (targetButton) {
+    targetButton.click();
+  }
+}
 
 function backspace() {
   if (operator === null) {
@@ -61,6 +68,7 @@ function buttonInput(e) {
 
   if (inputType === "numberIn") {
     if (operator === null) {
+      if (firstNumber.length > 10) return;
       if (firstNumber === "") {
         firstNumber = inputKey;
       } else {
@@ -68,6 +76,7 @@ function buttonInput(e) {
         firstNumber += inputKey;
       }
     } else {
+      if (secondNumber.length > 10) return;
       if (secondNumber === "") {
         secondNumber = inputKey;
       } else {
@@ -87,7 +96,7 @@ function buttonInput(e) {
     if (isValidOperation(firstNumber, secondNumber, operator)) {
       result = runMath(+firstNumber, +secondNumber, operator);
       operator = e.srcElement.innerText;
-      firstNumber = result;
+      firstNumber = `${Math.round(result * 1000000000) / 1000000000}`;
       secondNumber = "";
     } else {
       operator = e.srcElement.innerText;
@@ -127,7 +136,7 @@ function clear() {
 function runEquals() {
   if (isValidOperation(firstNumber, secondNumber, operator)) {
     result = runMath(+firstNumber, +secondNumber, operator);
-    firstNumber = result;
+    firstNumber = `${Math.round(result * 1000000000) / 1000000000}`;
     operator = null;
     secondNumber = "";
   }

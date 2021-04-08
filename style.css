@@ -47,10 +47,9 @@ html {
 
 .calcButtons,
 .numberIn,
-#clearButton,
-#equalsButton,
-#dotButton,
-#backButton {
+#Escape,
+#Enter,
+#Backspace {
   flex: 1 1 24%;
   text-align: center;
   justify-content: center;
@@ -67,12 +66,12 @@ html {
 }
 
 .calcButtons,
-#clearButton,
-#equalsButton {
+#Escape,
+#Enter {
   background-color: #d4d1eb;
 }
 
-#backButton {
+#Backspace {
   font-size: 1em;
 }
 
