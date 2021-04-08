@@ -47,11 +47,13 @@ function keyboardShortcuts(e) {
 
 function backspace() {
   if (operator === null) {
-    if (firstNumber.length <= 1) return;
-    firstNumber = firstNumber.substr(0, firstNumber.length - 1);
+    firstNumber.length <= 1
+      ? (firstNumber = "0")
+      : (firstNumber = firstNumber.substr(0, firstNumber.length - 1));
   } else {
-    if (secondNumber.length <= 1) return;
-    secondNumber = secondNumber.substr(0, secondNumber.length - 1);
+    secondNumber.length <= 1
+      ? (secondNumber = "0")
+      : (secondNumber = secondNumber.substr(0, secondNumber.length - 1));
   }
   displayMath();
 }
