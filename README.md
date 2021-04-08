@@ -1,3 +1,3 @@
 # jsCalculator
 
-A calculator app to be made using Javascript, HTML, and CSS.
+Web Calculator written in Javascript.
