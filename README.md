@@ -1,3 +1,4 @@
 # jsCalculator
 
-Web Calculator written in Javascript.
+Calculator written in Javascript.
+https://carloshrm.github.io/jsCalculator/
